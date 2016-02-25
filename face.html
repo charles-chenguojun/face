@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    翻转测试测试
+  </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+</head>
+<style type="text/css">
+  .face {  
+    border: 1px solid #fff;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+  .ques {
+    background: #FFF;
+    display: none;
+    margin: 0 auto;
+    width: 526px;
+  }
+  .layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(12, 16, 17, 0.26);
+    display: none;
+    z-index: 999;
+  }
+  #scream {
+    display: block;
+
+  }
+  input {
+    display: block;
+    width: 500px;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  }
+  span {
+    display: block;
+    margin-bottom: 15px;
+  }
+  .tips {
+    border-top: 2px solid #000;
+    margin-top: 20px;
+  }
+  .tips ul {
+    margin: 0;
+  }
+  .tips ul li {
+    margin-bottom: 10px;
+  }
+</style>
+<body id="main">
+  <div id="wrapper" style="overflow: hidden;float:left;position: relative;">
+    <img id="scream" src="images/faces.jpg" alt="The Scream" width="100%">
+    <div class="layer"></div>
+  </div>
+  <div style="clear:both"></div> 
+  <P>
+    json数据
+  </P>
+  <p id="coordinate">
+    
+  </p>
+
+  <div class="ques">
+    <span>问题：</span><input type="text" id="ques">
+    <br>
+    <span>第一个选项:</span><input type="text" id="First">
+    <br>
+    <span>第二个选项:</span><input type="text" id="Second">
+    <br>
+    <span>第三个选项:</span><input type="text" id="Third">
+    <br>
+    <span>第四个选项:</span><input type="text" id="Fourth">
+    <button id="save">保存</button>
+    <button id="cancel">取消</button>
+  </div>
+
+</body>
+<script type="text/javascript">
+window.onload=function() {
+    employees = [];
+    MouseDownFlag = false //判断是否触发mouseup
+    var params = {        //存储选定区域变量
+      StartX: 0,
+      StartY: 0,
+      EndX:0,
+      EndY:0,
+      H: 0,
+      w: 0,
+      flag: false
+    };
+    //绘制选定区域
+    function DraBox(Element,x,y,w,h,ex,ey){     
+          Element.setAttribute("class","img-box")
+          Element.style.position = "absolute";
+          Element.style.height = h + "px";
+          Element.style.width = w + "px";
+          Element.style.border = "1px solid grey";
+          Element.style.left = x +"px";//注意Firefox下必须加"px"
+          Element.style.top = y +"px";
+          Element.style.background = "rgba(107, 144, 232, 0.45)";
+          Element.setAttribute("StartX",x)
+          Element.setAttribute("StartY",y)
+          Element.setAttribute("EndX",ex)
+          Element.setAttribute("EndY",ey)
+    }
+    //图片区域mousedown事件
+    document.getElementById("scream").onmousedown = function(event){
+          var e = event || window.event;
+          Div = document.createElement("div");
+          var Box = document.getElementById("wrapper");
+          var StartX = e.pageX;
+          var StartY = e.pageY;
+          params.StartX = StartX;
+          params.StartY = StartY;
+          params.flag = true;
+          Box.appendChild(Div);
+          DraBox(Div,StartX,StartY,0,0)
+
+    }
+    //图片区域mousemove事件
+    document.getElementById("scream").onmousemove = function(event){
+          var e = event || window.event;
+          if(params.flag) {
+            var EndX = e.pageX;
+            var EndY = e.pageY;
+            params.EndX = EndX;
+            params.EndY = EndY;
+            var Box_w = EndX - params.StartX;
+            var Box_h = EndY - params.StartY;
+            DraBox(Div,params.StartX,params.StartY,Box_w,Box_h,params.EndX,params.EndY)         
+          }
+
+    }
+    //选定区域mouseup事件
+    $(document).on("mouseup",".img-box",function(){
+        var e = event || window.event;
+        var Box_num = employees.length;
+        params.flag = false;
+        if (MouseDownFlag == true) {   //阻止mouseup
+          return false;
+        }else{
+          if ($(".img-box:last").height() == 0) {
+            $(".img-box:last").remove()
+            $(".layer").hide();
+            $(".ques").hide();
+          }else {
+             $(".layer").show();
+             $(".ques").show();
+              employees.push({});
+              employees[employees.length-1].StartX = $(".img-box")[employees.length-1].getAttribute("startx");
+              employees[employees.length-1].StartY = $(".img-box")[employees.length-1].getAttribute("starty");
+              employees[employees.length-1].EndX = $(".img-box")[employees.length-1].getAttribute("endx");
+              employees[employees.length-1].EndY = $(".img-box")[employees.length-1].getAttribute("endy");
+               employees[employees.length-1].ImgW = $("#scream").width();
+          };
+        };
+    })
+    //在选定区域单击时阻止mouseup
+    $(document).on("mousedown",".img-box",function(event){
+       MouseDownFlag = true;
+    })
+    //选定区域 双击 删除
+    $(document).on("dblclick",".img-box",function(event){
+       MouseDownFlag = false;
+       $(this).remove();
+       var index = $(this).index();
+       if (employees.length > 0) {
+          employees.splice(index-1,1);
+          str_pretty3 = JSON.stringify(employees, null, 4)
+          $("#coordinate").text(str_pretty3)
+       }
+    })
+    //保存问题和 选项
+    $("#save").click(function(){
+        if ($("#ques").val() == ''||$("#First").val() == ''||$("#Second").val() == ''||$("#Third").val() == ''||$("#Fourth").val() == '') {
+          alert("请填写资料");
+          return false
+        }else {
+          employees[employees.length-1].ques = $("#ques").val();
+          employees[employees.length-1].First = $("#First").val();
+          employees[employees.length-1].Second = $("#Second").val();
+          employees[employees.length-1].Third = $("#Third").val();
+          employees[employees.length-1].Fourth = $("#Fourth").val();
+          str_pretty2 = JSON.stringify(employees, null, 4)
+          $(".layer").hide();
+          $(".ques").hide();
+          $(".ques").find("input").val(""); 
+          $("#coordinate").text(str_pretty2)
+        };
+    })
+  //取消
+  $("#cancel").click(function(){
+      $(".layer").hide();
+      $(".ques").hide();
+      $(".ques").find("input").val("");
+      $(".img-box").eq(employees.length-1).remove();
+      employees.pop();
+  })
+}
+</script>
+</html>
