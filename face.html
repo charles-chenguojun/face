@@ -203,7 +203,7 @@ window.onload=function() {
        if (employees.length > 0) {
           employees.splice(index-1,1);
           str_pretty3 = JSON.stringify(employees, null, 4)
-          $("#coordinate").text(str_pretty3)
+          $("#coordinate").text("var employees =" + str_pretty3)
        }
     })
     //保存问题和 选项
@@ -221,7 +221,7 @@ window.onload=function() {
           $(".layer").hide();
           $(".ques").removeClass("ques_transform");
           $(".ques").find("input").val(""); 
-          $("#coordinate").text(str_pretty2)
+          $("#coordinate").text("var employees =" + str_pretty2)
         };
     })
   //取消
