@@ -18,10 +18,24 @@
   }
   .ques {
     background: #FFF;
-    display: none;
+    transform:scale(0,0);
+    -ms-transform:scale(0,0); /* IE 9 */
+    -webkit-transform:scale(0,0); /* Safari and Chrome */
     margin: 0 auto;
     width: 526px;
+    transition:transform 0.2s;
+    -ms-transition:transform 0.42s; /* IE 9 */
+    -webkit-transition:transform 0.2s; /* Safari and Chrome */
+    position: absolute;
+    top:40px;
+    right: 100px;
+    z-index: 999;
+    padding: 20px;
   }
+  .ques_transform {
+    transform:scale(1,1);
+  }
+
   .layer {
     position: absolute;
     left: 0;
@@ -30,7 +44,7 @@
     height: 100%;
     background: rgba(12, 16, 17, 0.26);
     display: none;
-    z-index: 999;
+    z-index: 990;
   }
   #scream {
     display: block;
@@ -164,10 +178,10 @@ window.onload=function() {
           if ($(".img-box:last").height() == 0) {
             $(".img-box:last").remove()
             $(".layer").hide();
-            $(".ques").hide();
+            $(".ques").removeClass("ques_transform");
           }else {
              $(".layer").show();
-             $(".ques").show();
+             $(".ques").addClass("ques_transform");
               employees.push({});
               employees[employees.length-1].StartX = $(".img-box")[employees.length-1].getAttribute("startx");
               employees[employees.length-1].StartY = $(".img-box")[employees.length-1].getAttribute("starty");
@@ -205,7 +219,7 @@ window.onload=function() {
           employees[employees.length-1].Fourth = $("#Fourth").val();
           str_pretty2 = JSON.stringify(employees, null, 4)
           $(".layer").hide();
-          $(".ques").hide();
+          $(".ques").removeClass("ques_transform");
           $(".ques").find("input").val(""); 
           $("#coordinate").text(str_pretty2)
         };
@@ -213,7 +227,7 @@ window.onload=function() {
   //取消
   $("#cancel").click(function(){
       $(".layer").hide();
-      $(".ques").hide();
+      $(".ques").removeClass("ques_transform");
       $(".ques").find("input").val("");
       $(".img-box").eq(employees.length-1).remove();
       employees.pop();
