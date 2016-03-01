@@ -134,13 +134,15 @@ window.onload=function() {
           Element.style.left = x +"px";//注意Firefox下必须加"px"
           Element.style.top = y +"px";
           Element.style.background = "rgba(107, 144, 232, 0.45)";
-          Element.setAttribute("StartX",x)
-          Element.setAttribute("StartY",y)
-          Element.setAttribute("EndX",ex)
-          Element.setAttribute("EndY",ey)
+          Element.setAttribute("StartX",x);
+          Element.setAttribute("StartY",y);
+          Element.setAttribute("EndX",ex);
+          Element.setAttribute("EndY",ey);
     }
     //图片区域mousedown事件
     document.getElementById("scream").onmousedown = function(event){
+          params.flag = true;
+          MouseDownFlag = false;
           var e = event || window.event;
           Div = document.createElement("div");
           var Box = document.getElementById("wrapper");
@@ -148,10 +150,9 @@ window.onload=function() {
           var StartY = e.pageY;
           params.StartX = StartX;
           params.StartY = StartY;
-          params.flag = true;
           Box.appendChild(Div);
           DraBox(Div,StartX,StartY,0,0)
-
+          console.log("down")
     }
     //图片区域mousemove事件
     document.getElementById("scream").onmousemove = function(event){
@@ -194,10 +195,6 @@ window.onload=function() {
     //在选定区域单击时阻止mouseup
     $(document).on("mousedown",".img-box",function(event){
        MouseDownFlag = true;
-    })
-    //选定区域 双击 删除
-    $(document).on("dblclick",".img-box",function(event){
-       MouseDownFlag = false;
        $(this).remove();
        var index = $(this).index();
        if (employees.length > 0) {
@@ -205,6 +202,7 @@ window.onload=function() {
           str_pretty3 = JSON.stringify(employees, null, 4)
           $("#coordinate").text("var employees =" + str_pretty3)
        }
+       MouseDownFlag = false;
     })
     //保存问题和 选项
     $("#save").click(function(){
@@ -229,7 +227,7 @@ window.onload=function() {
       $(".layer").hide();
       $(".ques").removeClass("ques_transform");
       $(".ques").find("input").val("");
-      $(".img-box").eq(employees.length-1).remove();
+      $(".img-box:last").remove();
       employees.pop();
   })
 }
