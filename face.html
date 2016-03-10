@@ -106,6 +106,13 @@
     <span>第三个选项:</span><input type="text" id="Third">
     <br>
     <span>第四个选项:</span><input type="text" id="Fourth">
+     <span>正确选项:</span><select id="Ture">
+     <option value="1">1</option>
+     <option value="2">2</option>
+     <option value="3">3</option>
+     <option value="4">4</option>
+   </select>
+   <br>
     <button id="save">保存</button>
     <button id="cancel">取消</button>
   </div>
@@ -194,7 +201,7 @@ window.onload=function() {
     })
     //在选定区域单击时阻止mouseup
     $(document).on("mousedown",".img-box",function(event){
-       MouseDownFlag = true;
+       MouseDownFlag = true;//阻止mouseup 事件
        $(this).remove();
        var index = $(this).index();
        if (employees.length > 0) {
@@ -202,7 +209,7 @@ window.onload=function() {
           str_pretty3 = JSON.stringify(employees, null, 4)
           $("#coordinate").text("var employees =" + str_pretty3)
        }
-       MouseDownFlag = false;
+       MouseDownFlag = false; //恢复mouseup 事件
     })
     //保存问题和 选项
     $("#save").click(function(){
@@ -215,6 +222,7 @@ window.onload=function() {
           employees[employees.length-1].Second = $("#Second").val();
           employees[employees.length-1].Third = $("#Third").val();
           employees[employees.length-1].Fourth = $("#Fourth").val();
+          employees[employees.length-1].Ture = $("#Ture").val();
           str_pretty2 = JSON.stringify(employees, null, 4)
           $(".layer").hide();
           $(".ques").removeClass("ques_transform");

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    翻转测试测试
+  </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script type="text/javascript" src="json/flare.json"></script>
+</head>
+<style type="text/css">
+  .face {  
+    border: 1px solid #fff;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+ .ques {
+    background: #FFF;
+    transform:scale(0,0);
+    -ms-transform:scale(0,0); /* IE 9 */
+    -webkit-transform:scale(0,0); /* Safari and Chrome */
+    margin: 0 auto;
+    width: 526px;
+    transition:transform 0.2s;
+    -ms-transition:transform 0.42s; /* IE 9 */
+    -webkit-transition:transform 0.2s; /* Safari and Chrome */
+    position: absolute;
+    top:40px;
+    right: 100px;
+    z-index: 999;
+    padding: 20px;
+  }
+  .ques_transform {
+    transform:scale(1,1);
+  }
+  .layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(12, 16, 17, 0.26);
+    display: none;
+    z-index: 999;
+  }
+  #scream {
+    display: block;
+
+  }
+  input {
+    float: left;
+    width: 20px;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: none;
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+  }
+  span {
+    float: left;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+</style>
+<body id="main">
+  <div id="wrapper" style="overflow: hidden;position: relative;margin:0 auto;">
+    <img id="scream" src="images/faces.jpg" alt="The Scream" width="100%">
+    <div class="layer"></div>
+  </div>
+  <div class="ques">
+    <div style="overflow: hidden;">
+      <span id="ques">问题：</span>
+    </div>
+    <div style="overflow: hidden;"><input type="radio" id="First" name="ans"><span></span></div>
+    
+    <div style="overflow: hidden;"><input type="radio" id="Second" name="ans"><span></span></div>
+    
+    <div style="overflow: hidden;"><input type="radio" id="Third" name="ans"><span></span></div>
+    
+    <div style="overflow: hidden;"><input type="radio" id="Fourth" name="ans"><span></span></div>
+    <button id="save">提交</button>
+    <button id="cancel">取消</button>
+  </div>
+</body>
+<script type="text/javascript">
+
+  function DraBox(Element,x,y,w,h,ex,ey){     
+          Element.setAttribute("class","img-box")
+          Element.style.position = "absolute";
+          Element.style.height = h + "px";
+          Element.style.width = w + "px";
+          Element.style.border = "1px solid grey";
+          Element.style.left = x +"px";//注意Firefox下必须加"px"
+          Element.style.top = y +"px";
+          Element.style.background = "rgba(107, 144, 232, 0.45)";
+          Element.setAttribute("StartX",x)
+          Element.setAttribute("StartY",y)
+          Element.setAttribute("EndX",ex)
+          Element.setAttribute("EndY",ey)
+          Element.setAttribute("data-check","null")
+    }
+    
+    var Box = document.getElementById("wrapper");
+    for (var i = 0; i < employees.length; i++) {
+      var Scale = $("#scream").width()/employees[i].ImgW;
+      var Now_sx = employees[i].StartX*Scale;
+      var Now_sy = employees[i].StartY*Scale;
+      var Now_ex = employees[i].EndX*Scale;
+      var Now_ey = employees[i].EndY*Scale;
+      var Now_w = Now_ex - Now_sx;
+      var Now_h = Now_ey - Now_sy;
+      Div = document.createElement("div")
+      Box.appendChild(Div)
+      DraBox(Div,Now_sx,Now_sy,Now_w,Now_h,Now_ex,Now_ey);
+    };
+  $(function(){
+    $(document).on("click",".img-box",function(){
+         var index = $(this).index()-2;
+         var Ture = employees[index].Ture;
+         $(":radio").eq(Ture-1).attr("data-ture","ture")
+         $(".ques").addClass("ques_transform");
+         $("#ques").text(employees[index].ques);
+         $("#First").siblings("span").text(employees[index].First);
+         $("#Second").siblings("span").text(employees[index].Second);
+         $("#Third").siblings("span").text(employees[index].Third);
+         $("#Fourth").siblings("span").text(employees[index].Fourth);
+    })
+
+    $(document).on("click","#save",function(){
+         $(".ques").removeClass("ques_transform");
+    })
+
+    $(document).on("click","#cancel",function(){
+         $(".ques").removeClass("ques_transform");
+    })
+  })
+</script>
+</html>
